@@ -8,6 +8,7 @@ public class PlayAudioOnKeyPress : MonoBehaviour
     public float volume = 1.0f; // Volume level
     private AudioSource audioSource;
     private bool isPlaying = false;
+    private bool playerInsideCollider = false;
 
     private void Start()
     {
@@ -21,8 +22,8 @@ public class PlayAudioOnKeyPress : MonoBehaviour
 
     private void Update()
     {
-        // Check if the player pressed the "E" key and the audio is not already playing
-        if (Input.GetKeyDown(KeyCode.E) && !isPlaying)
+        // Check if the player pressed the "E" key, the audio is not already playing, and the player is inside the collider
+        if (Input.GetKeyDown(KeyCode.E) && !isPlaying && playerInsideCollider)
         {
             // Play the audio with the specified volume
             audioSource.volume = volume;
@@ -36,5 +37,23 @@ public class PlayAudioOnKeyPress : MonoBehaviour
     {
         isPlaying = false;
         audioSource.Stop();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // Check if the collider belongs to the player
+        if (other.CompareTag("Player"))
+        {
+            playerInsideCollider = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        // Check if the collider belongs to the player
+        if (other.CompareTag("Player"))
+        {
+            playerInsideCollider = false;
+        }
     }
 }

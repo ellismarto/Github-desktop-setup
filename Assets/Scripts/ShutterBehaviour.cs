@@ -7,11 +7,13 @@ public class ShutterBehaviour : MonoBehaviour
     // References to the Animator components
     public Animator[] animators;
 
-    // Update is called once per frame
-    void Update()
+    // Flag to track if the player is inside the collider
+    private bool playerInsideCollider = false;
+
+    private void Update()
     {
         // Check if the player is colliding with the collider and pressing the "E" key
-        if (Input.GetKeyDown(KeyCode.E))
+        if (playerInsideCollider && Input.GetKeyDown(KeyCode.E))
         {
             // Check if all animators are assigned
             if (AreAnimatorsAssigned())
@@ -40,5 +42,23 @@ public class ShutterBehaviour : MonoBehaviour
             }
         }
         return true;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // Check if the collider belongs to the player
+        if (other.CompareTag("Player"))
+        {
+            playerInsideCollider = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        // Check if the collider belongs to the player
+        if (other.CompareTag("Player"))
+        {
+            playerInsideCollider = false;
+        }
     }
 }
